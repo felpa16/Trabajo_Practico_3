@@ -1,9 +1,10 @@
 import random
 from typing import Optional, Tuple, List
 
-from gnome import Gnome, gnome
+#from gnome import Gnome, gnome
 import player
 import items
+from human import human
 
 
 Location = Tuple[int, int]
@@ -169,93 +170,53 @@ class Level:
         if self.tiles[i][j] is WALL:
             self.tiles[i][j] = AIR
 
-    def is_free(self, xy: Location) -> bool:
-        """Check if a given location is free of other entities."""
-        
-        if gnome.get_coordinates() == xy:
-            return False
+    #def is_free(self, xy: Location) -> bool:
+    #    """Check if a given location is free of other entities."""
+    #    
+    #    if gnome.get_coordinates() == xy:
+    #        return False
+    #
+    #    elif gnome.get_coordinates() != xy:
+    #        return True
 
-        elif gnome.get_coordinates() != xy:
-            return True
 
+    def are_connected(self, initial: Location, final: Location) -> bool:
+        """Check if there is walkable path between initial location and final location."""
 
-    def are_connected(self, initial: Location, end: Location) -> bool:
-        """Check if there is walkable path between initial location and end location."""
-        
-        initial = list(initial)
         right = (initial[0] + 1, initial[1])
-        left = (initial[0] - 1, initial[1])
         up = (initial[0], initial[1] + 1)
+        left = (initial[0] - 1, initial[1])
         down = (initial[0], initial[1] - 1)
-        walked_tiles = []
 
-        while initial != end:
+        if self.is_walkable(right) == True:
+            if right == final:
+                return True
+            return self.are_connected(right, final)
 
-            if self.is_walkable(right) == True and right not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[0] = initial[0] + 1
-                continue
-
-            elif self.is_walkable(up) == True and up not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[1] = initial[1] + 1
-                continue
-
-            elif self.is_walkable(left) == True and left not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[0] = initial[0] - 1
-                continue
-
-            elif self.is_walkable(down) == True and down not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[1] = initial[1] - 1
-                continue
-
-            else:
-                return False
-
-        return True
-    
-
-    def get_path(self, initial: Location, end: Location) -> bool:
-        """Return a sequence of locations between initial location and end location, if it exits."""
-
-        #no entiendo por que no podria devolver esto en el metodo are_connected (devolver True, walked_lines)
+        elif self.is_walkable(up) == True:
+            if up == final:
+                return True
+            return self.are_connected(up, final)
         
-        if self.are_connected(initial, end) == True:
-            initial = list(initial)
-        right = (initial[0] + 1, initial[1])
-        left = (initial[0] - 1, initial[1])
-        up = (initial[0], initial[1] + 1)
-        down = (initial[0], initial[1] - 1)
-        walked_tiles = []
+        elif self.is_walkable(left) == True:
+            if left == final:
+                return True
+            return self.are_connected(left, final)
 
-        while initial != end:
+        elif self.is_walkable(down) == True:
+            if down == final:
+                return True
+            return self.are_connected(down, final)
 
-            if self.is_walkable(right) == True and right not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[0] = initial[0] + 1
-                continue
+        return False    
 
-            elif self.is_walkable(up) == True and up not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[1] = initial[1] + 1
-                continue
+    def get_path(self, initial: Location, final: Location) -> bool:
+        """Return a sequence of locations between initial location and final location, if it exits."""
 
-            elif self.is_walkable(left) == True and left not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[0] = initial[0] - 1
-                continue
+        if self.are_connected(initial, final) == True:
+            pass
 
-            elif self.is_walkable(down) == True and down not in walked_tiles:
-                walked_tiles.append(initial)
-                initial[1] = initial[1] - 1
-                continue
-
-            else:
-                return "These tiles aren't connected"
-
-        return walked_tiles
+        return False
 
 
 class Dungeon:
@@ -336,3 +297,7 @@ class Dungeon:
     def is_free(self, xy: Location) -> bool:
         """NOT IMPLEMENTED. Check if a given location is free of other entities. See Level.is_free()."""
         return self.dungeon[self.level].is_free(xy)
+
+dungeon = Level(25, 80)
+
+dungeon.render(human)

@@ -8,7 +8,7 @@ class Item:
     def __init__(self, name, fc, type):
         self.name = name
         self.face = fc
-        self.type = type # tipo de item (si es un arma, una herramineta o un tesoro)
+        self.type = type
 
     def __str__(self):
         return self.name
@@ -32,5 +32,3 @@ class Amulet(Item):
 class PickAxe(Item):
     def __init__(self):
         super().__init__('Pickaxe', "(", 'tool')
-
-sword = Sword()

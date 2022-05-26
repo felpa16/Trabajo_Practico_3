@@ -5,17 +5,9 @@ class Player:
         self.hp = hit_points
         self.max_hp = hit_points
 
-
-    @property
-    def hp(self):
-        return self._hp
-
-    @hp.setter
+    #@hp.setter
     def hp(self, value):
-        if value > self.max_hp:
-            self._hp = self.max_hp
-        else:
-            self._hp = value
+        self.hp = value
         
     def loc(self):
         return self.x, self.y

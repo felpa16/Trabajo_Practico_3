@@ -6,7 +6,7 @@ import random
 from human import Human
 from items import Item
 import actions
-from templates.oop.player import Player
+from player import Player
 
 
 ROWS = 25

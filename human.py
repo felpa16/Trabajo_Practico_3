@@ -3,8 +3,8 @@ from player import Player
 
 
 class Human(Player):
-    def __init__(self, name, xy):
-        super().__init__(name, xy, 50)
+    def __init__(self, name, xy, hit_points):
+        super().__init__(name, xy, hit_points)
         self.weapon = None
         self.treasure = None
         self.tool = None
@@ -27,3 +27,5 @@ class Human(Player):
             return False
         elif self.tool != None:
             return True
+
+human = Human("Human", (9, 10), 100)
